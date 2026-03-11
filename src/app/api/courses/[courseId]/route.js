@@ -8,7 +8,7 @@ import { authOptions } from '@/lib/authOptions';
 
 export async function GET(req, { params }) {
   try {
-    const { courseId } = params;
+    const { courseId } = await params;
     await dbConnect();
 
     const course = await Course.findById(courseId).populate('teacherId', 'name');

@@ -12,7 +12,7 @@ export async function PATCH(req, { params }) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 403 });
     }
 
-    const { id } = params;
+    const { id } = await params;
     const body = await req.json();
     const { role } = body;
 

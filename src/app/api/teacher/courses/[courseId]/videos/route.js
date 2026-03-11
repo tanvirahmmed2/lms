@@ -14,7 +14,7 @@ export async function GET(req, { params }) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 403 });
     }
 
-    const { courseId } = params;
+    const { courseId } = await params;
     await dbConnect();
 
     // Ensure the teacher actually owns this course
@@ -48,7 +48,7 @@ export async function POST(req, { params }) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 403 });
     }
 
-    const { courseId } = params;
+    const { courseId } = await params;
     const { title, youtubeUrl, isFree } = await req.json();
 
     if (!title || !youtubeUrl) {

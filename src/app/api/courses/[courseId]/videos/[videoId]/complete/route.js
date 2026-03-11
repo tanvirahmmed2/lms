@@ -13,7 +13,7 @@ export async function POST(req, { params }) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
-    const { courseId, videoId } = params;
+    const { courseId, videoId } = await params;
     await dbConnect();
 
     // Verify video exists
