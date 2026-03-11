@@ -3,7 +3,7 @@ import dbConnect from '@/lib/db';
 import Course from '@/models/Course';
 import Video from '@/models/Video';
 import Enrollment from '@/models/Enrollment';
-import { getServerSession } from 'next-auth';
+import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/authOptions';
 
 export async function GET(req, { params }) {
@@ -33,7 +33,9 @@ export async function GET(req, { params }) {
     // Fetch videos. If enrolled, return all videos. 
     // If not enrolled, only return the free preview videos.
     let videos = [];
-    if (isEnrolled || session?.user?.role === 'ADMIN' || course.teacherId._id.toString() === session?.user?.id) {
+    const isTeacher = course.teacherId && course.teacherId._id.toString() === session?.user?.id;
+    
+    if (isEnrolled || session?.user?.role === 'ADMIN' || isTeacher) {
       videos = await Video.find({ courseId }).sort({ position: 1 });
     } else {
       videos = await Video.find({ courseId, isFree: true }).sort({ position: 1 });
