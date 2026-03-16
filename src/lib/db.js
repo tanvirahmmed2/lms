@@ -1,8 +1,6 @@
 import mongoose from 'mongoose';
 import dns from 'dns';
 
-// Force Node to use Google DNS for this process
-// This often fixes the querySrv ECONNREFUSED error on restrictive networks
 dns.setServers(['8.8.8.8', '8.8.4.4']);
 
 const MONGODB_URI = process.env.MONGODB_URI;

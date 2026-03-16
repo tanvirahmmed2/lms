@@ -7,9 +7,11 @@ const videoSchema = new mongoose.Schema(
       required: [true, 'Video title is required'],
       trim: true,
     },
+    description: {
+      type: String, // Rich text or notes for the lesson
+    },
     youtubeUrl: {
-      type: String, // Usually full url or just the video id like "dQw4w9WgXcQ"
-      required: [true, 'YouTube URL or Video ID is required'],
+      type: String, // Optional URL or video ID for mixed/video lessons
     },
     position: {
       type: Number,
