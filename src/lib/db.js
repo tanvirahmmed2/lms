@@ -1,47 +1,18 @@
 import mongoose from 'mongoose';
 import dns from 'dns';
 
+const MONGODB_URI = process.env.MONGO_URI;
+
 dns.setServers(['8.8.8.8', '8.8.4.4']);
 
-const MONGODB_URI = process.env.MONGODB_URI;
-
-if (!MONGODB_URI) {
-  throw new Error('Please define the MONGODB_URI environment variable inside .env.local');
+const ConnectDB = async () => {
+    try {
+        await mongoose.connect(MONGODB_URI)
+        console.log('MongoDB server connected successfully')
+    } catch (error) {
+        console.log(error)
+        console.log('Failed to connect mongodb')
+    }
 }
 
-let cached = global.mongoose;
-
-if (!cached) {
-  cached = global.mongoose = { conn: null, promise: null };
-}
-
-async function dbConnect() {
-  if (cached.conn) {
-    return cached.conn;
-  }
-
-  if (!cached.promise) {
-    const opts = {
-      bufferCommands: false,
-      // IMPORTANT: Remove family: 4 if using Atlas SRV (+srv)
-      // Atlas needs to resolve multiple records which family: 4 can break
-    };
-
-    cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
-      console.log("Connected to MongoDB successfully");
-      return mongoose;
-    });
-  }
-
-  try {
-    cached.conn = await cached.promise;
-  } catch (e) {
-    cached.promise = null;
-    console.error("MongoDB Connection Error Details:", e);
-    throw e;
-  }
-
-  return cached.conn;
-}
-
-export default dbConnect;
+export default ConnectDB

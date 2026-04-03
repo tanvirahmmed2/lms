@@ -4,9 +4,9 @@ import User from '@/models/User';
 import { verifyToken } from '@/lib/auth';
 import { cookies } from 'next/headers';
 
-export async function GET(req) {
+export async function PUT(req, { params }) {
+  const { id } = await params;
   try {
-    await connectDB();
     const token = (await cookies()).get('token')?.value;
     if (!token) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     
@@ -15,15 +15,21 @@ export async function GET(req) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
-    // Optional query parsing e.g ?role=student
-    const { searchParams } = new URL(req.url);
-    const roleFilter = searchParams.get('role');
+    await connectDB();
     
-    const filter = roleFilter ? { role: roleFilter } : {};
+    const userToBlock = await User.findById(id);
+    if (!userToBlock) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+    }
 
-    const users = await User.find(filter).select('-password').sort({ createdAt: -1 });
+    if (userToBlock.role === 'admin') {
+      return NextResponse.json({ error: 'Cannot block an admin' }, { status: 400 });
+    }
 
-    return NextResponse.json(users, { status: 200 });
+    userToBlock.status = userToBlock.status === 'blocked' ? 'active' : 'blocked';
+    await userToBlock.save();
+
+    return NextResponse.json({ message: `User is now ${userToBlock.status}`, user: userToBlock }, { status: 200 });
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

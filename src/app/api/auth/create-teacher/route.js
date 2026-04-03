@@ -2,11 +2,10 @@ import { NextResponse } from 'next/server';
 import connectDB from '@/lib/db';
 import User from '@/models/User';
 import bcrypt from 'bcryptjs';
-import { signToken } from '@/lib/auth';
-import { cookies } from 'next/headers';
 
 export async function POST(req) {
   try {
+    // Middleware already verified user is Admin
     await connectDB();
     const { name, email, password } = await req.json();
 
@@ -22,17 +21,7 @@ export async function POST(req) {
       name,
       email,
       password: hashedPassword,
-      role: 'student'
-    });
-
-    const token = await signToken({ id: user._id.toString(), role: user.role });
-    (await cookies()).set({
-      name: 'token',
-      value: token,
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      path: '/',
-      maxAge: 60 * 60 * 24 * 30 // 30 days
+      role: 'teacher'
     });
 
     return NextResponse.json({

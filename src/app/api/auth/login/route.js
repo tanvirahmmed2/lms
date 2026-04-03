@@ -8,22 +8,21 @@ import { cookies } from 'next/headers';
 export async function POST(req) {
   try {
     await connectDB();
-    const { name, email, password } = await req.json();
+    const { email, password } = await req.json();
 
-    let user = await User.findOne({ email });
-    if (user) {
-      return NextResponse.json({ error: 'User already exists' }, { status: 400 });
+    const user = await User.findOne({ email });
+    if (!user) {
+      return NextResponse.json({ error: 'No user found with this email' }, { status: 401 });
     }
 
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    if (user.status === 'blocked') {
+      return NextResponse.json({ error: 'Your account has been blocked' }, { status: 403 });
+    }
 
-    user = await User.create({
-      name,
-      email,
-      password: hashedPassword,
-      role: 'student'
-    });
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
+    }
 
     const token = await signToken({ id: user._id.toString(), role: user.role });
     (await cookies()).set({
@@ -40,7 +39,7 @@ export async function POST(req) {
       name: user.name,
       email: user.email,
       role: user.role
-    }, { status: 201 });
+    }, { status: 200 });
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

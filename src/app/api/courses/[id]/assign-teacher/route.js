@@ -4,17 +4,8 @@ import Course from '@/models/Course';
 import { verifyToken } from '@/lib/auth';
 import { cookies } from 'next/headers';
 
-export async function GET() {
-  try {
-    await connectDB();
-    const courses = await Course.find().populate('teacher', 'name email');
-    return NextResponse.json(courses, { status: 200 });
-  } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
-  }
-}
-
-export async function POST(req) {
+export async function PUT(req, { params }) {
+  const { id } = await params;
   try {
     const token = (await cookies()).get('token')?.value;
     if (!token) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -25,10 +16,18 @@ export async function POST(req) {
     }
 
     await connectDB();
-    const { title, description, price } = await req.json();
-    const course = await Course.create({ title, description, price });
+    const body = await req.json();
+    // Assuming backend body passes { teacherId }
+    // The prompt says "Assign a teacher to a course", the body can be flexible.
+    const { teacherId } = body;
 
-    return NextResponse.json(course, { status: 201 });
+    let course = await Course.findById(id);
+    if (!course) return NextResponse.json({ error: 'Course not found' }, { status: 404 });
+
+    course.teacher = teacherId;
+    await course.save();
+
+    return NextResponse.json(course, { status: 200 });
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
