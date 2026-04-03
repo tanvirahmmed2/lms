@@ -1,5 +1,5 @@
 'use client';
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 
 const AuthContext = createContext();
@@ -9,9 +9,9 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  const fetchUser = async () => {
+  const fetchUser = useCallback(async () => {
     try {
-      const res = await fetch('/api/auth/me');
+      const res = await fetch('/api/auth/me', { cache: 'no-store' });
       if (res.ok) {
         const data = await res.json();
         setUser(data);
@@ -23,11 +23,11 @@ export const AuthProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchUser();
-  }, []);
+  }, [fetchUser]);
 
   const login = async (email, password) => {
     const res = await fetch('/api/auth/login', {
@@ -37,8 +37,11 @@ export const AuthProvider = ({ children }) => {
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Login failed');
-    await fetchUser();
-    router.push(`/dashboard/${data.role}`);
+    
+    const userData = data.user || data;
+    setUser(userData);
+    router.push(`/dashboard/${userData.role}`);
+    router.refresh();
   };
 
   const register = async (name, email, password) => {
@@ -49,15 +52,21 @@ export const AuthProvider = ({ children }) => {
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Registration failed');
-    await fetchUser();
-    router.push(`/dashboard/${data.role}`);
+    
+    const userData = data.user || data;
+    setUser(userData);
+    router.push(`/dashboard/${userData.role}`);
+    router.refresh();
   };
 
   const logout = async () => {
-    await fetch('/api/auth/me', { method: 'POST' }); 
-    
-    setUser(null);
-    router.push('/');
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' });
+    } finally {
+      setUser(null);
+      router.push('/login');
+      router.refresh();
+    }
   };
 
   return (
