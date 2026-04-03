@@ -1,4 +1,5 @@
 
+import Footer from "@/components/Footer";
 import "./globals.css";
 import { Providers } from "./providers";
 import Navbar from "@/components/Navbar";
@@ -19,6 +20,7 @@ export default function RootLayout({ children }) {
           <main className="flex-1 w-full relative">
             {children}
           </main>
+          <Footer/>
         </Providers>
       </body>
     </html>
