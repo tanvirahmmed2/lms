@@ -13,7 +13,7 @@ export default function AdminUsersManagement() {
 
   const fetchUsers = async () => {
     try {
-      const res = await fetch('/api/admin/users');
+      const res = await fetch('/api/admin/users?role=admin,teacher');
       if (res.ok) setUsers(await res.json());
     } catch (err) {
       console.error(err);
@@ -62,7 +62,7 @@ export default function AdminUsersManagement() {
 
   return (
     <div className="space-y-8">
-      <h1 className="text-2xl font-bold text-gray-900 mb-8">User Management</h1>
+      <h1 className="text-2xl font-bold text-gray-900 mb-8">Staff Management</h1>
 
       {/* Teacher Creation Form */}
       <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm max-w-xl">
@@ -79,7 +79,7 @@ export default function AdminUsersManagement() {
 
       <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
         <div className="p-4 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
-          <h2 className="font-bold text-gray-700">All Registered Users</h2>
+          <h2 className="font-bold text-gray-700">All Registered Staff</h2>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">

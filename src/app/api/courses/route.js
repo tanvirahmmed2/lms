@@ -1,8 +1,16 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/lib/db';
 import Course from '@/models/Course';
+import User from '@/models/User';
 import { verifyToken } from '@/lib/auth';
 import { cookies } from 'next/headers';
+import { v2 as cloudinary } from 'cloudinary';
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_API,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 export async function GET() {
   try {
@@ -25,8 +33,36 @@ export async function POST(req) {
     }
 
     await connectDB();
-    const { title, description, price } = await req.json();
-    const course = await Course.create({ title, description, price });
+    const formData = await req.formData();
+    const title = formData.get('title');
+    const description = formData.get('description');
+    const price = formData.get('price');
+    const coverImage = formData.get('coverImage');
+
+    if (!coverImage || coverImage.size === 0 || typeof coverImage === 'string') {
+      return NextResponse.json({ error: 'Cover image is mandatory' }, { status: 400 });
+    }
+
+    let coverImageUrl = '';
+    let coverImageId = '';
+    
+    const buffer = Buffer.from(await coverImage.arrayBuffer());
+    const uploadResult = await new Promise((resolve, reject) => {
+      cloudinary.uploader.upload_stream({ folder: 'lms_courses' }, (error, result) => {
+        if (error) reject(error);
+        else resolve(result);
+      }).end(buffer);
+    });
+    coverImageUrl = uploadResult.secure_url;
+    coverImageId = uploadResult.public_id;
+
+    const course = await Course.create({ 
+      title, 
+      description, 
+      price: Number(price) || 0, 
+      coverImage: coverImageUrl,
+      coverImageId
+    });
 
     return NextResponse.json(course, { status: 201 });
   } catch (error) {

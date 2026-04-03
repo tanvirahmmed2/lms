@@ -3,7 +3,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useRouter, usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 import Link from 'next/link';
-import { LayoutDashboard, Users, BookOpen, BarChart3, PlusCircle } from 'lucide-react';
+import { LayoutDashboard, Users, BookOpen, BarChart3, PlusCircle, GraduationCap } from 'lucide-react';
 
 export default function DashboardLayout({ children }) {
   const { user, loading } = useAuth();
@@ -24,7 +24,8 @@ export default function DashboardLayout({ children }) {
       case 'admin':
         return [
           { name: 'Overview', href: '/dashboard/admin', icon: LayoutDashboard },
-          { name: 'Users', href: '/dashboard/admin/users', icon: Users },
+          { name: 'Staff', href: '/dashboard/admin/users', icon: Users },
+          { name: 'Students', href: '/dashboard/admin/student', icon: GraduationCap },
           { name: 'Courses', href: '/dashboard/admin/courses', icon: BookOpen },
         ];
       case 'teacher':
