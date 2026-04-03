@@ -7,6 +7,12 @@ export default function CourseClassroom() {
   const [contents, setContents] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const getYoutubeEmbedUrl = (url) => {
+    if (!url) return '';
+    const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([^&]{11})/);
+    return match && match[1] ? `https://www.youtube.com/embed/${match[1]}` : url;
+  };
+
   useEffect(() => {
     const fetchContent = async () => {
       try {
@@ -53,13 +59,33 @@ export default function CourseClassroom() {
                 {content.type === 'youtube' && (
                   <div className="relative overflow-hidden w-full" style={{ paddingTop: '56.25%' }}>
                     <iframe 
-                      src={content.url} 
+                      src={getYoutubeEmbedUrl(content.url)} 
                       title={content.title}
                       className="absolute top-0 left-0 w-full h-full rounded shadow-sm"
                       frameBorder="0" 
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                       allowFullScreen
                     ></iframe>
+                  </div>
+                )}
+
+                {content.type === 'text' && (
+                  <div className="p-6 bg-white text-gray-800 whitespace-pre-wrap leading-relaxed rounded border border-gray-200">
+                    {content.textContent}
+                  </div>
+                )}
+
+                {content.type === 'link' && (
+                  <div className="flex flex-col items-center justify-center p-12 bg-gray-50 rounded border border-gray-200">
+                    <div className="text-6xl mb-4">🔗</div>
+                    <a 
+                      href={content.url} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="bg-blue-600 text-white font-bold py-3 px-8 rounded-full hover:bg-blue-700 transition"
+                    >
+                      Visit External Link
+                    </a>
                   </div>
                 )}
 

@@ -22,10 +22,10 @@ export default function Navbar() {
                 <Link href={`/dashboard/${user.role}`} className="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">
                   Dashboard ({user.role})
                 </Link>
-                <div className="flex items-center gap-2 text-sm text-gray-600 mr-2 border-l pl-4 border-gray-300">
+                <Link href={'/dashboard'} className="flex items-center gap-2 text-sm text-gray-600 mr-2 border-l pl-4 border-gray-300">
                   <User className="h-4 w-4" />
                   {user.name}
-                </div>
+                </Link>
                 <button
                   onClick={logout}
                   className="flex items-center gap-2 bg-red-50 text-red-600 hover:bg-red-100 px-3 py-2 rounded-md text-sm font-medium transition"

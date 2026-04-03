@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { Ban, CheckCircle, Shield } from 'lucide-react';
+import { Ban, CheckCircle, Shield, Trash2 } from 'lucide-react';
 
 export default function AdminUsersManagement() {
   const [users, setUsers] = useState([]);
@@ -32,6 +32,17 @@ export default function AdminUsersManagement() {
       const res = await fetch(`/api/admin/users/${userId}/toggle-block`, { method: 'PUT' });
       if (res.ok) fetchUsers();
       else alert('Failed to toggle block status');
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleDeleteUser = async (userId) => {
+    if (!confirm('Are you sure you want to permanently delete this user?')) return;
+    try {
+      const res = await fetch(`/api/admin/users/${userId}`, { method: 'DELETE' });
+      if (res.ok) fetchUsers();
+      else alert('Failed to delete user');
     } catch (err) {
       console.error(err);
     }
@@ -111,12 +122,21 @@ export default function AdminUsersManagement() {
                   </td>
                   <td className="p-4 text-right">
                     {u.role !== 'admin' && (
-                      <button 
-                        onClick={() => handleToggleBlock(u._id)}
-                        className={`text-sm px-3 py-1 rounded border transition-colors ${u.status === 'blocked' ? 'bg-green-50 text-green-700 border-green-200 hover:bg-green-100' : 'bg-red-50 text-red-700 border-red-200 hover:bg-red-100'}`}
-                      >
-                        {u.status === 'blocked' ? 'Unblock' : 'Block User'}
-                      </button>
+                      <div className="flex items-center justify-end gap-2">
+                        <button 
+                          onClick={() => handleToggleBlock(u._id)}
+                          className={`text-sm px-3 py-1 rounded border transition-colors ${u.status === 'blocked' ? 'bg-green-50 text-green-700 border-green-200 hover:bg-green-100' : 'bg-orange-50 text-orange-700 border-orange-200 hover:bg-orange-100'}`}
+                        >
+                          {u.status === 'blocked' ? 'Unblock' : 'Block User'}
+                        </button>
+                        <button 
+                          onClick={() => handleDeleteUser(u._id)}
+                          className="text-sm px-3 py-1 rounded border bg-red-50 text-red-700 border-red-200 hover:bg-red-100 transition-colors flex items-center"
+                          title="Permanently Delete User"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
                     )}
                   </td>
                 </tr>

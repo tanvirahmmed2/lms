@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { Shield, BookOpen, Edit2, Trash2 } from 'lucide-react';
+import { Shield, BookOpen, Edit2, Trash2, Eye } from 'lucide-react';
+import Link from 'next/link';
 
 export default function AdminCoursesManager() {
   const [courses, setCourses] = useState([]);
@@ -198,6 +199,13 @@ export default function AdminCoursesManager() {
                     </div>
                   </td>
                   <td className="p-4 text-right space-x-3 whitespace-nowrap">
+                    <Link 
+                      href={`/dashboard/admin/courses/${c._id}`}
+                      className="text-gray-400 hover:text-green-600 transition-colors inline-block"
+                      title="View Detailed Course Analytics"
+                    >
+                      <Eye className="w-4 h-4 inline" />
+                    </Link>
                     <button 
                       onClick={() => {
                         setEditCourseId(c._id);

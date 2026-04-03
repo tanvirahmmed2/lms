@@ -3,7 +3,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useRouter, usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 import Link from 'next/link';
-import { LayoutDashboard, Users, BookOpen, BarChart3, PlusCircle, GraduationCap } from 'lucide-react';
+import { LayoutDashboard, Users, BookOpen, BarChart3, PlusCircle, GraduationCap, UserCircle } from 'lucide-react';
 
 export default function DashboardLayout({ children }) {
   const { user, loading } = useAuth();
@@ -20,27 +20,34 @@ export default function DashboardLayout({ children }) {
   if (!user) return null;
 
   const getLinks = () => {
+    let links = [];
     switch (user.role) {
       case 'admin':
-        return [
+        links = [
           { name: 'Overview', href: '/dashboard/admin', icon: LayoutDashboard },
           { name: 'Staff', href: '/dashboard/admin/users', icon: Users },
           { name: 'Students', href: '/dashboard/admin/student', icon: GraduationCap },
           { name: 'Courses', href: '/dashboard/admin/courses', icon: BookOpen },
         ];
+        break;
       case 'teacher':
-        return [
+        links = [
           { name: 'Analytics', href: '/dashboard/teacher', icon: BarChart3 },
           { name: 'My Courses', href: '/dashboard/teacher/courses', icon: BookOpen },
         ];
+        break;
       case 'student':
-        return [
+        links = [
           { name: 'My Learning', href: '/dashboard/student', icon: BookOpen },
           { name: 'Catalog', href: '/courses', icon: PlusCircle },
         ];
-      default:
-        return [];
+        break;
     }
+    
+    // Global Links available to everyone
+    links.push({ name: 'My Profile', href: '/dashboard', icon: UserCircle });
+    
+    return links;
   };
 
   return (

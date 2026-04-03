@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { Search, UserCircle, ExternalLink } from 'lucide-react';
+import { Search, UserCircle, ExternalLink, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 
 export default function AdminStudentsManagement() {
@@ -21,6 +21,17 @@ export default function AdminStudentsManagement() {
       console.error(err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDeleteStudent = async (id) => {
+    if (!confirm('Are you sure you want to permanently delete this student?')) return;
+    try {
+      const res = await fetch(`/api/admin/users/${id}`, { method: 'DELETE' });
+      if (res.ok) fetchStudents();
+      else alert('Failed to delete student');
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -86,13 +97,20 @@ export default function AdminStudentsManagement() {
                     <td className="p-4 text-gray-500 text-sm">
                       {new Date(student.createdAt).toLocaleDateString()}
                     </td>
-                    <td className="p-4 text-right">
+                    <td className="p-4 text-right flex items-center justify-end gap-3">
                       <Link 
                         href={`/dashboard/admin/student/${student._id}`} 
-                        className="text-sm font-medium text-blue-600 hover:text-blue-800 flex items-center justify-end gap-1"
+                        className="text-sm font-medium text-blue-600 hover:text-blue-800 flex items-center gap-1 bg-blue-50 px-3 py-1.5 rounded transition-colors"
                       >
                         View Profile <ExternalLink className="w-4 h-4" />
                       </Link>
+                      <button 
+                        onClick={() => handleDeleteStudent(student._id)}
+                        className="text-sm px-2 py-1.5 rounded transition-colors text-red-600 hover:bg-red-50"
+                        title="Permanently Delete Student"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
                     </td>
                   </tr>
                 ))

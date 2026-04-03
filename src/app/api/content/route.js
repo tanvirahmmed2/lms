@@ -16,7 +16,14 @@ export async function POST(req) {
     }
 
     await connectDB();
-    const { courseId, title, type, url } = await req.json();
+    const { courseId, title, type, url, textContent } = await req.json();
+    
+    if (type !== 'text' && !url) {
+      return NextResponse.json({ error: 'URL is required for this content type' }, { status: 400 });
+    }
+    if (type === 'text' && !textContent) {
+      return NextResponse.json({ error: 'Text content is required' }, { status: 400 });
+    }
     
     // verify teacher is assigned to this course
     const course = await Course.findById(courseId);
@@ -25,7 +32,7 @@ export async function POST(req) {
       return NextResponse.json({ error: 'Not assigned to this course' }, { status: 403 });
     }
 
-    const content = await Content.create({ courseId, title, type, url });
+    const content = await Content.create({ courseId, title, type, url, textContent });
     
     course.contents.push(content._id);
     await course.save();
