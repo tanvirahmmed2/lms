@@ -24,15 +24,15 @@ export async function GET() {
       Subscription.countDocuments()
     ]);
 
-    // Calculate revenue based on course price * active subscriptions
+    
     const activeSubs = await Subscription.find({ status: 'active' }).populate('courseId');
     const revenue = activeSubs.reduce((acc, sub) => {
-      // defensive checking
+      
+      
       return acc + (sub.courseId?.price || 0);
     }, 0);
 
-    // Provide trend data (e.g. students registered by month, mock data or real data using aggregation)
-    // For simplicity, we fetch all students to group them or use mongo aggregation
+   
     const userAggregate = await User.aggregate([
       { $match: { role: 'student' } },
       { $group: {

@@ -23,7 +23,7 @@ export async function GET() {
 }
 
 export async function POST() {
-  // Use POST to handle LOGOUT functionality since it clears cookies
+  
   try {
     (await cookies()).delete('token');
     return NextResponse.json({ message: 'Logged out successfully' }, { status: 200 });

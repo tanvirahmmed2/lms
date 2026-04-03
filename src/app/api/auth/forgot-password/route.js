@@ -10,14 +10,13 @@ export async function POST(req) {
 
     const user = await User.findOne({ email });
     if (!user) {
-      // Don't leak whether user exists for security, but return 200 anyway
-      // Or we can return an error for UX context 
+      
       return NextResponse.json({ error: 'If an account exists, an email is sent' }, { status: 200 });
     }
 
-    // Generate 6 digit code
+    
     const resetCode = Math.floor(100000 + Math.random() * 900000).toString();
-    const resetCodeExpires = Date.now() + 10 * 60 * 1000; // 10 minutes
+    const resetCodeExpires = Date.now() + 10 * 60 * 1000; 
 
     user.resetCode = resetCode;
     user.resetCodeExpires = resetCodeExpires;

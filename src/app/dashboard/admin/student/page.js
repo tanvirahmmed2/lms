@@ -58,7 +58,7 @@ export default function AdminStudentsManagement() {
       </h1>
 
       <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-        <div className="p-4 border-b border-gray-200 bg-gray-50 flex justify-between items-center bg-white flex-col sm:flex-row gap-4">
+        <div className="p-4 border-b border-gray-200 bg-gray-50 flex justify-between items-center  flex-col sm:flex-row gap-4">
           <h2 className="font-bold text-gray-700">All Registered Students</h2>
           
           <div className="relative w-full sm:w-72">

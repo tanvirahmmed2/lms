@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { Shield, BookOpen, Edit2, Trash2, Eye } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function AdminCoursesManager() {
   const [courses, setCourses] = useState([]);
@@ -175,7 +176,7 @@ export default function AdminCoursesManager() {
                 <tr key={c._id} className="hover:bg-gray-50">
                   <td className="p-4">
                     {c.coverImage ? (
-                      <img src={c.coverImage} alt={c.title} className="w-16 h-10 object-cover rounded border border-gray-200" />
+                      <Image src={c.coverImage} alt={c.title} width={1000} height={1000} className="w-16 h-10 object-cover rounded border border-gray-200" />
                     ) : (
                       <div className="w-16 h-10 bg-gray-200 rounded border border-gray-200"></div>
                     )}
@@ -187,7 +188,7 @@ export default function AdminCoursesManager() {
                     <div className="flex flex-col gap-1">
                       {c.teacher?.name && <span className="text-xs font-medium text-blue-600">Current: {c.teacher.name}</span>}
                       <select 
-                        className="border border-gray-300 rounded text-sm p-1 max-w-[150px]"
+                        className="border border-gray-300 rounded text-sm p-1 max-w-37.5"
                         defaultValue=""
                         onChange={(e) => handleAssignTeacher(c._id, e.target.value)}
                       >

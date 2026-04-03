@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { ArrowLeft, UserCircle, Mail, Calendar, BookOpen, ShieldCheck, Ban, Clock } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function StudentDetailProfile() {
   const { id } = useParams();
@@ -36,7 +37,7 @@ export default function StudentDetailProfile() {
 
   return (
     <div className="space-y-8 max-w-5xl mx-auto">
-      {/* Header and navigation */}
+      
       <div className="flex items-center gap-4">
         <Link 
           href="/dashboard/admin/student" 
@@ -47,7 +48,7 @@ export default function StudentDetailProfile() {
         <h1 className="text-2xl font-bold text-gray-900">Student Profile Summary</h1>
       </div>
 
-      {/* Main Profile Header */}
+
       <div className="bg-white p-8 rounded-xl border border-gray-200 shadow-sm flex flex-col md:flex-row gap-8 items-start">
         <div className="w-24 h-24 rounded-full bg-blue-100 text-blue-700 font-bold text-4xl flex items-center justify-center uppercase shrink-0">
           {student.name.charAt(0)}
@@ -85,7 +86,7 @@ export default function StudentDetailProfile() {
         </div>
       </div>
 
-      {/* Enrolled Courses Section */}
+
       <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
         <div className="p-6 border-b border-gray-200 bg-gray-50 flex items-center gap-3">
           <BookOpen className="w-5 h-5 text-gray-700" />
@@ -103,7 +104,7 @@ export default function StudentDetailProfile() {
               {student.enrolledCourses.map((course) => (
                 <div key={course._id} className="border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition-shadow group flex flex-col">
                   {course.coverImage ? (
-                    <img 
+                    <Image 
                       src={course.coverImage} 
                       alt={course.title} 
                       className="w-full h-40 object-cover border-b border-gray-200"

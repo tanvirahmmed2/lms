@@ -7,10 +7,10 @@ export default function Home() {
         <div className="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
           <div className="text-center">
             <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-              Monolithic Next.js LMS Platform
+              Learning Management System Platform
             </h1>
             <p className="mt-6 text-lg leading-8 text-gray-600">
-              A fully integrated learning management system built entirely on the Next.js App Router. Discover courses, learn, and grow without boundaries.
+              A fully integrated learning management system. Discover courses, learn, and grow without boundaries.
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
               <Link

@@ -44,7 +44,6 @@ export default function DashboardLayout({ children }) {
         break;
     }
     
-    // Global Links available to everyone
     links.push({ name: 'My Profile', href: '/dashboard', icon: UserCircle });
     
     return links;

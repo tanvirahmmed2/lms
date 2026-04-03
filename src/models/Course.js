@@ -4,8 +4,8 @@ const courseSchema = new mongoose.Schema({
   title: { type: String, required: true },
   description: { type: String },
   price: { type: Number, default: 0 },
-  coverImage: { type: String, required: true }, // cloudinary image URL
-  coverImageId: { type: String, required: true }, // cloudinary public_id for deletion
+  coverImage: { type: String, required: true },
+  coverImageId: { type: String, required: true },
   teacher: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   students: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   contents: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Content' }]

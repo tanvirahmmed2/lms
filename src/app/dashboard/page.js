@@ -41,8 +41,8 @@ export default function GlobalProfileSettings() {
 
       if (res.ok) {
         setMessage('Profile updated successfully!');
-        setPassword(''); // clear password box
-        await fetchUser(); // Reload context
+        setPassword('');
+        await fetchUser(); 
       } else {
         const data = await res.json();
         setError(data.error || 'Failed to update profile');
@@ -68,8 +68,8 @@ export default function GlobalProfileSettings() {
 
       <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
         
-        {/* Profile Card Header */}
-        <div className="bg-gradient-to-r from-gray-50 to-gray-100 p-8 flex items-center gap-6 border-b border-gray-200">
+        
+        <div className="bg-linear-to-r from-gray-50 to-gray-100 p-8 flex items-center gap-6 border-b border-gray-200">
           <div className="w-24 h-24 rounded-full bg-blue-600 text-white font-bold text-4xl flex items-center justify-center uppercase shadow-md">
             {user.name?.charAt(0) || '?'}
           </div>

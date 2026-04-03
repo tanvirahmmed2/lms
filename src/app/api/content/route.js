@@ -11,7 +11,7 @@ export async function POST(req) {
     if (!token) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     const payload = await verifyToken(token);
     if (!payload || payload.role !== 'teacher') {
-      // Admin could also be permitted, but prompt explicitly said POST: teacher
+      
       return NextResponse.json({ error: 'Forbidden. Teacher only' }, { status: 403 });
     }
 
@@ -25,7 +25,7 @@ export async function POST(req) {
       return NextResponse.json({ error: 'Text content is required' }, { status: 400 });
     }
     
-    // verify teacher is assigned to this course
+    
     const course = await Course.findById(courseId);
     if (!course) return NextResponse.json({ error: 'Course not found' }, { status: 404 });
     if (course.teacher?.toString() !== payload.id) {

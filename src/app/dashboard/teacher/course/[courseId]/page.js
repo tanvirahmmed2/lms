@@ -8,7 +8,6 @@ export default function ManageCourseContent() {
   const [contents, setContents] = useState([]);
   const [loading, setLoading] = useState(true);
   
-  // Form State
   const [editingId, setEditingId] = useState(null);
   const [title, setTitle] = useState('');
   const [type, setType] = useState('youtube');

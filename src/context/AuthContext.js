@@ -54,7 +54,8 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = async () => {
-    await fetch('/api/auth/me', { method: 'POST' }); // Our logout route logic
+    await fetch('/api/auth/me', { method: 'POST' }); 
+    
     setUser(null);
     router.push('/');
   };

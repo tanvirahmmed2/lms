@@ -46,12 +46,12 @@ export async function DELETE(req, { params }) {
     const user = await User.findById(id);
     if (!user) return NextResponse.json({ error: 'User not found' }, { status: 404 });
 
-    // If teacher, carefully remove them from current courses
+    
     if (user.role === 'teacher') {
       await Course.updateMany({ teacher: id }, { $unset: { teacher: "" } });
     }
 
-    // Process complete hard delete
+    
     await User.findByIdAndDelete(id);
 
     return NextResponse.json({ message: 'User deleted permanently' }, { status: 200 });

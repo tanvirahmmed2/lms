@@ -6,7 +6,7 @@ export default function AdminUsersManagement() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Teacher Creation Forms
+  
   const [tName, setTName] = useState('');
   const [tEmail, setTEmail] = useState('');
   const [tPassword, setTPassword] = useState('');
@@ -75,7 +75,7 @@ export default function AdminUsersManagement() {
     <div className="space-y-8">
       <h1 className="text-2xl font-bold text-gray-900 mb-8">Staff Management</h1>
 
-      {/* Teacher Creation Form */}
+
       <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm max-w-xl">
         <h2 className="text-lg font-bold mb-4 flex items-center"><Shield className="w-5 h-5 mr-2 text-blue-600" /> Create Teacher Account</h2>
         <form onSubmit={handleCreateTeacher} className="space-y-4">

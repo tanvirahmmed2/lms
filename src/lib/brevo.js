@@ -4,7 +4,7 @@ export async function sendRecoveryEmail(toEmail, code) {
 
   if (!BREVO_API_KEY) {
     console.warn('WARNING: BREVO_API_KEY is not configured in .env');
-    // If not configured, we print it to console for local testing purposes.
+    
     console.log(`[LOCAL DEV MAIL] To: ${toEmail} | Code: ${code}`);
     return { success: true, simulated: true };
   }

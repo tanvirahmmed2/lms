@@ -36,7 +36,7 @@ export default function StudentDashboard() {
       
       {subscriptions.length === 0 ? (
         <div className="bg-white p-12 border border-gray-200 rounded-xl text-center shadow-sm">
-          <p className="text-gray-500 mb-4 text-lg">You haven't enrolled in any courses yet.</p>
+          <p className="text-gray-500 mb-4 text-lg">You have not enrolled in any courses yet.</p>
           <Link href="/courses" className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-700 transition">
             Explore Catalog
           </Link>

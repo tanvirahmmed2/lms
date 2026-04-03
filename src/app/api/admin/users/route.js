@@ -15,7 +15,7 @@ export async function GET(req) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
-    // Optional query parsing e.g ?role=student or ?role=admin,teacher
+    
     const { searchParams } = new URL(req.url);
     const roleFilter = searchParams.get('role');
     
